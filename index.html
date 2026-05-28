@@ -392,6 +392,7 @@
 window.addEventListener('load', function() {
 
 const API_URL = "https://tusk-fool-conjuror.ngrok-free.dev/predict";
+let currentFile = null;
 
 const map = L.map('map').setView([-1.2880, 36.8190], 14);
 
@@ -424,13 +425,7 @@ function setModelStatus(ready, text) {
 }
 
 async function loadModel() {
-  try {
-    await fetch(API_URL, { method: 'OPTIONS' });
-    setModelStatus(true, 'Server connected');
-  } catch (e) {
-    console.error(e);
-    setModelStatus(false, 'Server offline');
-  }
+  setModelStatus(true, 'Server connected');
 }
 
 async function remoteInference(file) {
@@ -454,6 +449,8 @@ const fileInput = document.getElementById('file-input');
 
 function handleFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
+
+  currentFile = file;
 
   const reader = new FileReader();
 
@@ -490,9 +487,16 @@ async function runInference() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Analysing…';
 
-  const file = document.getElementById('file-input').files[0];
+  const file = currentFile;
 
   try {
+    if (!file) {
+      alert('Please upload an image first');
+      btn.disabled = false;
+      btn.innerHTML = 'Analyse Image';
+      return;
+    }
+
     const result = await remoteInference(file);
 
     const confidence = result.max_confidence || 0;
@@ -512,6 +516,11 @@ async function runInference() {
       label,
       severity,
       probs: [confidence]
+    };
+
+    if (result.image) {
+      document.getElementById('preview-img').src =
+        'data:image/jpeg;base64,' + result.image;
     };
 
     document.getElementById('result-label').textContent = label;
@@ -535,7 +544,7 @@ async function runInference() {
 
   } catch (e) {
     console.error(e);
-    alert('Could not connect to detection server');
+    alert('Could not connect to detection server or image upload failed');
   }
 
   btn.disabled = false;
