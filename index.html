@@ -449,7 +449,7 @@
         <span class="drop-icon">📡</span>
         <div id="drop-msg">
           <div class="drop-title">Drop aerial image here</div>
-          <div class="drop-sub">512 × 512 px only — JPG, PNG, WebP</div>
+          <div class="drop-sub">640 × 640 px only — JPG, PNG, WebP</div>
         </div>
         <input type="file" id="file-input" accept="image/*"/>
       </div>
@@ -615,22 +615,22 @@ function setModelStatus(ready, text) {
 // Real inference using onnxruntime-web
 async function realInference(imageElement) {
   const canvas = document.createElement('canvas');
-  canvas.width = 512; canvas.height = 512;
+  canvas.width = 640; canvas.height = 640;
   const ctx = canvas.getContext('2d');
-  ctx.drawImage(imageElement, 0, 0, 512, 512);
-  const imageData = ctx.getImageData(0, 0, 512, 512).data;
+  ctx.drawImage(imageElement, 0, 0, 640, 640);
+  const imageData = ctx.getImageData(0, 0, 640, 640).data;
 
-  // Normalise to float32 tensor [1, 3, 512, 512]
-  const float32 = new Float32Array(3 * 512 * 512);
+  // Normalise to float32 tensor [1, 3, 640, 640]
+  const float32 = new Float32Array(3 * 640 * 640);
   const mean = [0.485, 0.456, 0.406];
   const std  = [0.229, 0.224, 0.225];
-  for (let i = 0; i < 512 * 512; i++) {
+  for (let i = 0; i < 640 * 640; i++) {
     float32[i]                   = (imageData[i*4]   / 255 - mean[0]) / std[0];
-    float32[i + 512*512]         = (imageData[i*4+1] / 255 - mean[1]) / std[1];
-    float32[i + 512*512*2]       = (imageData[i*4+2] / 255 - mean[2]) / std[2];
+    float32[i + 640*640]         = (imageData[i*4+1] / 255 - mean[1]) / std[1];
+    float32[i + 640*640*2]       = (imageData[i*4+2] / 255 - mean[2]) / std[2];
   }
 
-  const tensor = new ort.Tensor('float32', float32, [1, 3, 512, 512]);
+  const tensor = new ort.Tensor('float32', float32, [1, 3, 640, 640]);
   const feeds = {};
   feeds[ortSession.inputNames[0]] = tensor;
   const results = await ortSession.run(feeds);
@@ -705,7 +705,7 @@ function showError(msg) {
     dz.style.borderColor = '';
     dz.style.background = '';
     document.getElementById('drop-msg').innerHTML =
-      '<div class="drop-title">Drop aerial image here</div><div class="drop-sub">512 × 512 px only — JPG, PNG, WebP</div>';
+      '<div class="drop-title">Drop aerial image here</div><div class="drop-sub">640 × 640 px only — JPG, PNG, WebP</div>';
   }, 3000);
 }
 
@@ -716,8 +716,8 @@ function handleFile(file) {
     // Check dimensions before accepting
     const testImg = new Image();
     testImg.onload = function() {
-      if (testImg.width !== 512 || testImg.height !== 512) {
-        showError('Image must be exactly 512 × 512 px. Yours is ' + testImg.width + ' × ' + testImg.height);
+      if (testImg.width !== 640 || testImg.height !== 640) {
+        showError('Image must be exactly 640 × 640 px. Yours is ' + testImg.width + ' × ' + testImg.height);
         return;
       }
       const img = document.getElementById('preview-img');
