@@ -755,11 +755,11 @@ async function runInference() {
     probs = await mockInference(img);
   }
 
-  // Find top class — if confidence below 0.5, show clean
+  // Find top class — if confidence below 0.1, show clean
   const topProb = Math.max(...probs);
   const topIdx = probs.indexOf(topProb);
   let label, severity;
-  if (ortSession && topProb < 0.5) {
+  if (topProb < 0.10) {
     label = "Clean — No Litter Detected";
     severity = "low";
   } else {
