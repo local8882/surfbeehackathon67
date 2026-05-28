@@ -462,7 +462,7 @@
     </div>
 
     <!-- Analyse button -->
-    <button id="analyse-btn" onclick="runInference()">Analyse Image</button>
+    <button id="analyse-btn">Analyse Image</button>
 
     <!-- Result -->
     <div id="result-card">
@@ -480,8 +480,8 @@
           <input class="loc-input" id="lat-input" placeholder="Latitude" value="-1.2864" type="number" step="0.0001"/>
           <input class="loc-input" id="lng-input" placeholder="Longitude" value="36.8172" type="number" step="0.0001"/>
         </div>
-        <button id="pin-btn" onclick="addPin()">📍 Drop pin on map</button>
-        <button id="download-btn" onclick="downloadResult()" style="width:100%;margin-top:8px;padding:14px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;">⬇ Download Result</button>
+        <button id="pin-btn">📍 Drop pin on map</button>
+        <button id="download-btn" style="width:100%;margin-top:8px;padding:14px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;">⬇ Download Result</button>
       </div>
     </div>
 
@@ -883,10 +883,9 @@ function downloadResult() {
 
 loadModel();
 
-// Expose functions to global scope for onclick attributes
-window.runInference = runInference;
-window.addPin = addPin;
-window.downloadResult = downloadResult;
+document.getElementById('analyse-btn').addEventListener('click', runInference);
+document.getElementById('pin-btn').addEventListener('click', addPin);
+document.getElementById('download-btn').addEventListener('click', downloadResult);
 
 }); // end window.addEventListener load
 </script>
