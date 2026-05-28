@@ -590,6 +590,7 @@ let ortSession = null;
 // If not found, falls back to mock predictions
 async function loadModel() {
   try {
+    ort.env.wasm.numThreads = 1;
     ortSession = await ort.InferenceSession.create('./best.onnx');
     setModelStatus(true, 'Model ready');
     console.log('✅ ONNX model loaded');
@@ -626,19 +627,25 @@ async function realInference(imageElement) {
   const feeds = {};
   feeds[ortSession.inputNames[0]] = tensor;
   const results = await ortSession.run(feeds);
-  const output = results[ortSession.outputNames[0]].data;
+  const outputKey = ortSession.outputNames[0];
+  const output = results[outputKey].data;
+  const shape = results[outputKey].dims;
+  console.log('Output shape:', shape, 'Length:', output.length);
+  console.log('First 10 values:', Array.from(output.slice(0,10)));
 
   // YOLOv8 detection output shape: [1, 5, 8400]
-  // Each detection: [x, y, w, h, confidence]
-  // Find the highest confidence detection across all 8400 anchors
-  const numAnchors = 8400;
+  // rows: x, y, w, h, confidence
+  const numAnchors = shape[shape.length - 1];
+  const numRows = shape[shape.length - 2];
+  console.log('numAnchors:', numAnchors, 'numRows:', numRows);
+
   let maxConf = 0;
+  // confidence is the last row (index numRows-1)
   for (let i = 0; i < numAnchors; i++) {
-    const conf = output[4 * numAnchors + i]; // confidence row
+    const conf = output[(numRows - 1) * numAnchors + i];
     if (conf > maxConf) maxConf = conf;
   }
-
-  // Return as single-element array [litter_confidence]
+  console.log('Max confidence:', maxConf);
   return [maxConf];
 }
 
