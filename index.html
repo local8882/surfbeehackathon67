@@ -30,7 +30,6 @@
       overflow-x: hidden;
     }
 
-    /* Background grid texture */
     body::before {
       content: '';
       position: fixed;
@@ -43,7 +42,6 @@
       z-index: 0;
     }
 
-    /* ── Header ── */
     header {
       position: relative;
       z-index: 10;
@@ -92,17 +90,14 @@
 
     .status-dot.ready { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 
-    /* ── Main layout ── */
     main {
       position: relative;
       z-index: 10;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0;
       height: calc(100vh - 73px);
     }
 
-    /* ── LEFT PANEL ── */
     .left-panel {
       border-right: 1px solid var(--border);
       display: flex;
@@ -120,7 +115,6 @@
       text-transform: uppercase;
     }
 
-    /* Drop zone */
     #dropzone {
       border: 2px dashed var(--border);
       border-radius: 16px;
@@ -131,14 +125,6 @@
       background: var(--surface);
       position: relative;
       overflow: hidden;
-    }
-
-    #dropzone::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,170,0.06) 0%, transparent 70%);
-      pointer-events: none;
     }
 
     #dropzone:hover, #dropzone.dragover {
@@ -165,7 +151,6 @@
 
     #file-input { display: none; }
 
-    /* Preview */
     #preview-wrap {
       display: none;
       border-radius: 12px;
@@ -192,7 +177,6 @@
       color: var(--accent);
     }
 
-    /* Analyse button */
     #analyse-btn {
       display: none;
       width: 100%;
@@ -205,14 +189,8 @@
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.02em;
     }
 
-    #analyse-btn:hover { background: #00f0c0; transform: translateY(-1px); }
-    #analyse-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-    /* Result card */
     #result-card {
       display: none;
       border-radius: 16px;
@@ -231,7 +209,6 @@
     .result-label-text {
       font-size: 22px;
       font-weight: 800;
-      letter-spacing: -0.5px;
     }
 
     .severity-badge {
@@ -241,14 +218,12 @@
       padding: 4px 12px;
       border-radius: 20px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
     }
 
-    .badge-low    { background: rgba(34,197,94,0.15);  color: var(--low);    border: 1px solid rgba(34,197,94,0.3); }
-    .badge-medium { background: rgba(245,158,11,0.15); color: var(--medium); border: 1px solid rgba(245,158,11,0.3); }
-    .badge-high   { background: rgba(239,68,68,0.15);  color: var(--high);   border: 1px solid rgba(239,68,68,0.3); }
+    .badge-low    { background: rgba(34,197,94,0.15); color: var(--low); }
+    .badge-medium { background: rgba(245,158,11,0.15); color: var(--medium); }
+    .badge-high   { background: rgba(239,68,68,0.15); color: var(--high); }
 
-    /* Confidence bars */
     .conf-bars { display: flex; flex-direction: column; gap: 8px; }
 
     .conf-row {
@@ -263,7 +238,6 @@
       color: var(--muted);
       font-family: 'Space Mono', monospace;
       font-size: 10px;
-      flex-shrink: 0;
     }
 
     .conf-track {
@@ -277,7 +251,7 @@
     .conf-fill {
       height: 100%;
       border-radius: 3px;
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: width 0.6s;
       width: 0%;
     }
 
@@ -289,7 +263,6 @@
       color: var(--muted);
     }
 
-    /* Location input */
     .loc-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -303,12 +276,7 @@
       border-radius: 8px;
       padding: 8px 12px;
       color: var(--text);
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      width: 100%;
     }
-
-    .loc-input:focus { outline: none; border-color: var(--accent); }
 
     #pin-btn {
       margin-top: 10px;
@@ -318,16 +286,9 @@
       border: 1px solid var(--accent);
       border-radius: 10px;
       color: var(--accent);
-      font-family: 'Syne', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
-    #pin-btn:hover { background: rgba(0,212,170,0.08); }
-
-    /* Loading spinner */
     .spinner {
       display: inline-block;
       width: 16px; height: 16px;
@@ -335,13 +296,11 @@
       border-top-color: #000;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
-      vertical-align: middle;
       margin-right: 8px;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── RIGHT PANEL: Map ── */
     .right-panel {
       display: flex;
       flex-direction: column;
@@ -351,75 +310,10 @@
       padding: 16px 24px;
       border-bottom: 1px solid var(--border);
       display: flex;
-      align-items: center;
       justify-content: space-between;
     }
 
-    #map {
-      flex: 1;
-    }
-
-    /* Pins legend */
-    .map-legend {
-      padding: 12px 24px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-    }
-
-    .legend-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-    }
-
-    /* Notification toast */
-    #toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--surface);
-      border: 1px solid var(--accent);
-      border-radius: 12px;
-      padding: 12px 20px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--accent);
-      z-index: 9999;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      white-space: nowrap;
-    }
-
-    #toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* model loading notice */
-    #model-notice {
-      background: rgba(0,212,170,0.06);
-      border: 1px solid rgba(0,212,170,0.2);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 12px;
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-      line-height: 1.6;
-    }
-
-    #model-notice b { color: var(--accent); }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    #map { flex: 1; }
   </style>
 </head>
 <body>
@@ -429,22 +323,19 @@
     <div class="logo-icon">🛰</div>
     WASH Aerial Inspector
   </div>
-  <div style="display:flex; gap:12px; align-items:center;">
-    <div class="status-pill">
-      <div class="status-dot" id="model-dot"></div>
-      <span id="model-status">loading model…</span>
-    </div>
+
+  <div class="status-pill">
+    <div class="status-dot" id="model-dot"></div>
+    <span id="model-status">connecting…</span>
   </div>
 </header>
 
 <main>
-  <!-- LEFT: Upload + Result -->
   <div class="left-panel">
 
     <div>
       <div class="panel-label" style="margin-bottom:12px">01 — Upload aerial image</div>
 
-      <!-- Drop zone -->
       <div id="dropzone" onclick="document.getElementById('file-input').click()">
         <span class="drop-icon">📡</span>
         <div id="drop-msg">
@@ -454,19 +345,17 @@
         <input type="file" id="file-input" accept="image/*"/>
       </div>
 
-      <!-- Preview -->
       <div id="preview-wrap" style="margin-top:16px;">
         <img id="preview-img" src="" alt="preview"/>
         <div class="preview-overlay" id="img-name">image.jpg</div>
       </div>
     </div>
 
-    <!-- Analyse button -->
     <button id="analyse-btn">Analyse Image</button>
 
-    <!-- Result -->
     <div id="result-card">
       <div class="panel-label" style="margin-bottom:12px">02 — Classification result</div>
+
       <div class="result-header">
         <div class="result-label-text" id="result-label">—</div>
         <div class="severity-badge" id="severity-badge">—</div>
@@ -476,128 +365,57 @@
 
       <div style="margin-top:16px;">
         <div class="panel-label" style="margin-bottom:8px">03 — Pin on map</div>
+
         <div class="loc-row">
-          <input class="loc-input" id="lat-input" placeholder="Latitude" value="-1.2864" type="number" step="0.0001"/>
-          <input class="loc-input" id="lng-input" placeholder="Longitude" value="36.8172" type="number" step="0.0001"/>
+          <input class="loc-input" id="lat-input" placeholder="Latitude" value="-1.2864" type="number"/>
+          <input class="loc-input" id="lng-input" placeholder="Longitude" value="36.8172" type="number"/>
         </div>
+
         <button id="pin-btn">📍 Drop pin on map</button>
-        <button id="download-btn" style="width:100%;margin-top:8px;padding:14px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;">⬇ Download Result</button>
       </div>
     </div>
-
   </div>
 
-  <!-- RIGHT: Map -->
   <div class="right-panel">
     <div class="map-header">
       <span class="panel-label">Live risk map</span>
-      <span id="pin-count" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);">0 sites flagged</span>
+      <span id="pin-count">0 sites flagged</span>
     </div>
+
     <div id="map"></div>
-    <div class="map-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--low)"></div>Safe</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--medium)"></div>Medium risk</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--high)"></div>High risk</div>
-      <div class="legend-item" style="margin-left:auto; color:var(--muted); font-size:10px;">Click any pin for details</div>
-    </div>
   </div>
 </main>
 
-<div id="toast">📍 Pin added to map!</div>
-
-<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/ort.min.js"></script>
 
 <script>
 window.addEventListener('load', function() {
 
-// ─────────────────────────────────────────────
-// MAP SETUP
-// ─────────────────────────────────────────────
-const map = L.map('map', { zoomControl: true }).setView([-1.2880, 36.8190], 14);
+const API_URL = "https://tusk-fool-conjuror.ngrok-free.dev/predict";
+
+const map = L.map('map').setView([-1.2880, 36.8190], 14);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap © CartoDB', maxZoom: 19
+  attribution: '© OpenStreetMap © CartoDB',
+  maxZoom: 19
 }).addTo(map);
 
 let pinCount = 0;
 let lastResult = null;
 
+const severityColor = {
+  low:'#22c55e',
+  medium:'#f59e0b',
+  high:'#ef4444'
+};
+
 function makeCircleIcon(color) {
   return L.divIcon({
-    html: `<div style="
-      width:20px;height:20px;border-radius:50%;
-      background:${color};
-      border:3px solid rgba(255,255,255,0.3);
-      box-shadow:0 0 12px ${color}88;
-      animation:pulse 2s infinite;
-    "></div>`,
+    html: `<div style="width:20px;height:20px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,0.3)"></div>`,
     className: '',
     iconSize: [20, 20],
     iconAnchor: [10, 10],
   });
-}
-
-const styleTag = document.createElement('style');
-styleTag.textContent = `
-  @keyframes pulse {
-    0%,100% { transform:scale(1); opacity:1; }
-    50%      { transform:scale(1.2); opacity:0.8; }
-  }
-`;
-document.head.appendChild(styleTag);
-
-// Seed map with some existing sites
-const seedSites = [
-  { lat:-1.2864, lng:36.8172, label:"Riverside Water Point", severity:"high",   note:"Turbidity 72 NTU" },
-  { lat:-1.2910, lng:36.8210, label:"Borehole Station B",    severity:"low",    note:"Within safe parameters" },
-  { lat:-1.2880, lng:36.8190, label:"Latrine Block — School",severity:"high",   note:"Structural failure detected" },
-  { lat:-1.2870, lng:36.8155, label:"Drainage Channel G",    severity:"medium", note:"Partial blockage" },
-  { lat:-1.2840, lng:36.8175, label:"Stormwater Basin I",    severity:"low",    note:"Clear, no standing water" },
-];
-
-const severityColor = { low:'#22c55e', medium:'#f59e0b', high:'#ef4444' };
-
-seedSites.forEach(s => {
-  const col = severityColor[s.severity];
-  L.marker([s.lat, s.lng], { icon: makeCircleIcon(col) })
-    .addTo(map)
-    .bindPopup(`
-      <div style="font-family:system-ui;min-width:180px">
-        <b style="font-size:13px">${s.label}</b><br>
-        <span style="font-size:11px;color:#888">${s.note}</span><br>
-        <span style="font-size:10px;padding:2px 8px;background:${col}22;color:${col};border-radius:10px;display:inline-block;margin-top:4px;font-weight:700;text-transform:uppercase">${s.severity}</span>
-      </div>
-    `);
-  pinCount++;
-});
-document.getElementById('pin-count').textContent = `${pinCount} sites flagged`;
-
-
-// ─────────────────────────────────────────────
-// ONNX MODEL  (mock until Anagh exports)
-// ─────────────────────────────────────────────
-
-// CLASS DEFINITIONS — matches Anagh model output order exactly
-const CLASSES = [
-  { name: "Marine Litter Detected",  severity: "high",  color: "#ef4444" },
-];
-
-let ortSession = null;
-
-// Try to load real ONNX model from model/wash_model.onnx
-// If not found, falls back to mock predictions
-async function loadModel() {
-  try {
-    ort.env.wasm.numThreads = 1;
-    ortSession = await ort.InferenceSession.create('./best.onnx');
-    setModelStatus(true, 'Model ready');
-    console.log('✅ ONNX model loaded');
-  } catch (e) {
-    console.warn('No ONNX model found — using demo mode. Drop model/wash_model.onnx to use real model.');
-    setModelStatus(true, 'Demo mode');
-  }
 }
 
 function setModelStatus(ready, text) {
@@ -605,303 +423,155 @@ function setModelStatus(ready, text) {
   document.getElementById('model-dot').className = 'status-dot' + (ready ? ' ready' : '');
 }
 
-// Real inference using onnxruntime-web
-async function realInference(imageElement) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 640; canvas.height = 640;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(imageElement, 0, 0, 640, 640);
-  const imageData = ctx.getImageData(0, 0, 640, 640).data;
-
-  // Normalise to float32 tensor [1, 3, 640, 640]
-  const float32 = new Float32Array(3 * 640 * 640);
-  const mean = [0.485, 0.456, 0.406];
-  const std  = [0.229, 0.224, 0.225];
-  for (let i = 0; i < 640 * 640; i++) {
-    float32[i]                   = (imageData[i*4]   / 255 - mean[0]) / std[0];
-    float32[i + 640*640]         = (imageData[i*4+1] / 255 - mean[1]) / std[1];
-    float32[i + 640*640*2]       = (imageData[i*4+2] / 255 - mean[2]) / std[2];
+async function loadModel() {
+  try {
+    await fetch(API_URL, { method: 'OPTIONS' });
+    setModelStatus(true, 'Server connected');
+  } catch (e) {
+    console.error(e);
+    setModelStatus(false, 'Server offline');
   }
-
-  const tensor = new ort.Tensor('float32', float32, [1, 3, 640, 640]);
-  const feeds = {};
-  feeds[ortSession.inputNames[0]] = tensor;
-  const results = await ortSession.run(feeds);
-  const outputKey = ortSession.outputNames[0];
-  const output = results[outputKey].data;
-  const shape = results[outputKey].dims;
-  console.log('Output shape:', shape, 'Length:', output.length);
-  console.log('First 10 values:', Array.from(output.slice(0,10)));
-
-  // YOLOv8 detection output shape: [1, 5, 8400]
-  // rows: x, y, w, h, confidence
-  const numAnchors = shape[shape.length - 1];
-  const numRows = shape[shape.length - 2];
-  console.log('numAnchors:', numAnchors, 'numRows:', numRows);
-
-  let maxConf = 0;
-  // confidence is the last row (index numRows-1)
-  for (let i = 0; i < numAnchors; i++) {
-    const conf = output[(numRows - 1) * numAnchors + i];
-    if (conf > maxConf) maxConf = conf;
-  }
-  console.log('Max confidence:', maxConf);
-  return [maxConf];
 }
 
-// Mock inference — realistic-looking predictions based on image brightness/colour
-function mockInference(imageElement) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      // Sample a few pixels to loosely base prediction on image colours
-      const canvas = document.createElement('canvas');
-      canvas.width = 64; canvas.height = 64;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(imageElement, 0, 0, 64, 64);
-      const d = ctx.getImageData(0, 0, 64, 64).data;
+async function remoteInference(file) {
+  const formData = new FormData();
+  formData.append('image', file);
 
-      let r=0, g=0, b=0;
-      for (let i = 0; i < d.length; i+=4) { r+=d[i]; g+=d[i+1]; b+=d[i+2]; }
-      r/=(d.length/4); g/=(d.length/4); b/=(d.length/4);
-
-      // Single class: marine_litter confidence score
-      let scores;
-      if (r > g && r > b) {
-        scores = [0.80]; // warm/brown tones → likely litter
-      } else if (g > r && g > b) {
-        scores = [0.15]; // green tones → likely clean
-      } else if (b > r && b > g) {
-        scores = [0.20]; // blue tones → likely clean water
-      } else {
-        scores = [0.55]; // neutral
-      }
-
-      // Add small noise
-      const noisy = scores.map(s => s + (Math.random()-0.5)*0.05);
-      const total = noisy.reduce((a,b)=>a+b,0);
-      resolve(noisy.map(s => Math.max(0, s/total)));
-    }, 900);
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    body: formData
   });
+
+  if (!response.ok) {
+    throw new Error('Prediction failed');
+  }
+
+  return await response.json();
 }
 
-
-// ─────────────────────────────────────────────
-// DRAG & DROP
-// ─────────────────────────────────────────────
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('file-input');
 
-dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
-dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+
+  const reader = new FileReader();
+
+  reader.onload = ev => {
+    document.getElementById('preview-img').src = ev.target.result;
+    document.getElementById('preview-wrap').style.display = 'block';
+    document.getElementById('img-name').textContent = file.name;
+    document.getElementById('analyse-btn').style.display = 'block';
+  };
+
+  reader.readAsDataURL(file);
+}
+
+fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+dropzone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropzone.classList.add('dragover');
+});
+
+dropzone.addEventListener('dragleave', () => {
+  dropzone.classList.remove('dragover');
+});
+
 dropzone.addEventListener('drop', e => {
   e.preventDefault();
   dropzone.classList.remove('dragover');
   handleFile(e.dataTransfer.files[0]);
 });
-fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
 
-function showError(msg) {
-  const dz = document.getElementById('dropzone');
-  dz.style.borderColor = '#ef4444';
-  dz.style.background = 'rgba(239,68,68,0.05)';
-  document.getElementById('drop-msg').innerHTML =
-    '<span style="color:#ef4444;font-size:13px">❌ ' + msg + '</span>';
-  setTimeout(() => {
-    dz.style.borderColor = '';
-    dz.style.background = '';
-    document.getElementById('drop-msg').innerHTML =
-      '<div class="drop-title">Drop aerial image here</div><div class="drop-sub">JPG, PNG, WebP — any size</div>';
-  }, 3000);
-}
-
-function handleFile(file) {
-  if (!file || !file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    // Check dimensions before accepting
-    const testImg = new Image();
-    testImg.onload = function() {
-      const img = document.getElementById('preview-img');
-      img.src = ev.target.result;
-      document.getElementById('preview-wrap').style.display = 'block';
-      document.getElementById('img-name').textContent = file.name;
-      document.getElementById('analyse-btn').style.display = 'block';
-      document.getElementById('result-card').style.display = 'none';
-    };
-    testImg.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-
-// ─────────────────────────────────────────────
-// INFERENCE
-// ─────────────────────────────────────────────
 async function runInference() {
   const btn = document.getElementById('analyse-btn');
+
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Analysing…';
 
-  const img = document.getElementById('preview-img');
+  const file = document.getElementById('file-input').files[0];
 
-  let probs;
   try {
-    if (ortSession) {
-      probs = await realInference(img);
+    const result = await remoteInference(file);
+
+    const confidence = result.max_confidence || 0;
+
+    let label;
+    let severity;
+
+    if (result.litter_detected) {
+      label = 'Marine Litter Detected';
+      severity = confidence > 0.7 ? 'high' : 'medium';
     } else {
-      probs = await mockInference(img);
+      label = 'Clean — No Litter Detected';
+      severity = 'low';
     }
-  } catch(e) {
-    probs = await mockInference(img);
-  }
 
-  // Find top class — if confidence below 0.1, show clean
-  const topProb = Math.max(...probs);
-  const topIdx = probs.indexOf(topProb);
-  let label, severity;
-  if (topProb < 0.10) {
-    label = "Clean — No Litter Detected";
-    severity = "low";
-  } else {
-    label = CLASSES[topIdx] ? CLASSES[topIdx].name : "Clean — No Litter Detected";
-    severity = CLASSES[topIdx] ? CLASSES[topIdx].severity : "low";
-  }
-  lastResult = { label, severity, probs };
+    lastResult = {
+      label,
+      severity,
+      probs: [confidence]
+    };
 
-  document.getElementById('result-label').textContent = lastResult.label;
+    document.getElementById('result-label').textContent = label;
 
-  const badge = document.getElementById('severity-badge');
-  badge.textContent = lastResult.severity;
-  badge.className = 'severity-badge badge-' + lastResult.severity;
+    const badge = document.getElementById('severity-badge');
+    badge.textContent = severity;
+    badge.className = 'severity-badge badge-' + severity;
 
-  // Confidence bars
-  const barsEl = document.getElementById('conf-bars');
-  barsEl.innerHTML = '';
-  const sorted = CLASSES.map((c, i) => ({ ...c, prob: probs[i], idx: i }))
-    .sort((a,b) => b.prob - a.prob);
-
-  sorted.forEach(item => {
-    const pct = Math.round(item.prob * 100);
-    const row = document.createElement('div');
-    row.className = 'conf-row';
-    row.innerHTML = `
-      <div class="conf-name">${item.name.length > 22 ? item.name.slice(0,22)+'…' : item.name}</div>
-      <div class="conf-track"><div class="conf-fill" style="background:${item.color}" data-pct="${pct}"></div></div>
-      <div class="conf-pct">${pct}%</div>
+    const barsEl = document.getElementById('conf-bars');
+    barsEl.innerHTML = `
+      <div class="conf-row">
+        <div class="conf-name">Marine Litter</div>
+        <div class="conf-track">
+          <div class="conf-fill" style="background:#ef4444;width:${Math.round(confidence * 100)}%"></div>
+        </div>
+        <div class="conf-pct">${Math.round(confidence * 100)}%</div>
+      </div>
     `;
-    barsEl.appendChild(row);
-  });
 
-  // Animate bars
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.conf-fill').forEach(el => {
-      el.style.width = el.dataset.pct + '%';
-    });
-  });
+    document.getElementById('result-card').style.display = 'block';
 
-  document.getElementById('result-card').style.display = 'block';
+  } catch (e) {
+    console.error(e);
+    alert('Could not connect to detection server');
+  }
+
   btn.disabled = false;
   btn.innerHTML = '↻ Re-analyse';
 }
 
-
-// ─────────────────────────────────────────────
-// ADD PIN TO MAP
-// ─────────────────────────────────────────────
 function addPin() {
   if (!lastResult) return;
+
   const lat = parseFloat(document.getElementById('lat-input').value);
   const lng = parseFloat(document.getElementById('lng-input').value);
-  if (isNaN(lat) || isNaN(lng)) { alert('Enter valid coordinates first.'); return; }
 
   const col = severityColor[lastResult.severity];
+
   L.marker([lat, lng], { icon: makeCircleIcon(col) })
     .addTo(map)
     .bindPopup(`
-      <div style="font-family:system-ui;min-width:180px">
-        <b style="font-size:13px">${lastResult.label}</b><br>
-        <span style="font-size:11px;color:#888">Confidence: ${Math.round(Math.max(...lastResult.probs)*100)}%</span><br>
-        <span style="font-size:10px;padding:2px 8px;background:${col}22;color:${col};border-radius:10px;display:inline-block;margin-top:4px;font-weight:700;text-transform:uppercase">${lastResult.severity}</span>
+      <div>
+        <b>${lastResult.label}</b><br>
+        Confidence: ${Math.round(lastResult.probs[0] * 100)}%
       </div>
     `)
     .openPopup();
 
-  map.flyTo([lat, lng], 15, { duration: 1.2 });
   pinCount++;
   document.getElementById('pin-count').textContent = `${pinCount} sites flagged`;
 
-  // Toast
-  const toast = document.getElementById('toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-
-// ─────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────
-// ─────────────────────────────────────────────
-// DOWNLOAD RESULT
-// ─────────────────────────────────────────────
-function downloadResult() {
-  if (!lastResult) return;
-
-  const img = document.getElementById('preview-img');
-  const canvas = document.createElement('canvas');
-  canvas.width = 640;
-  canvas.height = 740; // extra space for label bar at bottom
-  const ctx = canvas.getContext('2d');
-
-  // Draw the image
-  ctx.drawImage(img, 0, 0, 640, 640);
-
-  // Bottom bar background
-  const severityBg = { low: '#22c55e', medium: '#f59e0b', high: '#ef4444' };
-  const col = severityBg[lastResult.severity] || '#00d4aa';
-  ctx.fillStyle = '#111618';
-  ctx.fillRect(0, 640, 640, 100);
-
-  // Coloured accent strip
-  ctx.fillStyle = col;
-  ctx.fillRect(0, 640, 6, 100);
-
-  // Label text
-  ctx.fillStyle = '#e8eef0';
-  ctx.font = 'bold 22px sans-serif';
-  ctx.fillText(lastResult.label, 20, 672);
-
-  // Confidence
-  const conf = Math.round(Math.max(...lastResult.probs) * 100);
-  ctx.fillStyle = '#5a6e72';
-  ctx.font = '14px monospace';
-  ctx.fillText('Confidence: ' + conf + '%', 20, 698);
-
-  // Severity badge
-  ctx.fillStyle = col;
-  ctx.font = 'bold 12px monospace';
-  ctx.fillText(lastResult.severity.toUpperCase(), 20, 724);
-
-  // Timestamp
-  const ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
-  ctx.fillStyle = '#5a6e72';
-  ctx.font = '11px monospace';
-  ctx.textAlign = 'right';
-  ctx.fillText('WASH UAV Inspector — ' + ts, 630, 724);
-
-  // Download
-  const a = document.createElement('a');
-  a.download = 'wash_result_' + lastResult.label.replace(/\s+/g, '_') + '_' + conf + 'pct.png';
-  a.href = canvas.toDataURL('image/png');
-  a.click();
+  map.flyTo([lat, lng], 15);
 }
 
 loadModel();
 
 document.getElementById('analyse-btn').addEventListener('click', runInference);
 document.getElementById('pin-btn').addEventListener('click', addPin);
-document.getElementById('download-btn').addEventListener('click', downloadResult);
 
-}); // end window.addEventListener load
+});
 </script>
 
 </body>
