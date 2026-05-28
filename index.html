@@ -628,11 +628,18 @@ async function realInference(imageElement) {
   const results = await ortSession.run(feeds);
   const output = results[ortSession.outputNames[0]].data;
 
-  // Softmax
-  const max = Math.max(...output);
-  const exp = Array.from(output).map(v => Math.exp(v - max));
-  const sum = exp.reduce((a,b) => a+b, 0);
-  return exp.map(v => v / sum);
+  // YOLOv8 detection output shape: [1, 5, 8400]
+  // Each detection: [x, y, w, h, confidence]
+  // Find the highest confidence detection across all 8400 anchors
+  const numAnchors = 8400;
+  let maxConf = 0;
+  for (let i = 0; i < numAnchors; i++) {
+    const conf = output[4 * numAnchors + i]; // confidence row
+    if (conf > maxConf) maxConf = conf;
+  }
+
+  // Return as single-element array [litter_confidence]
+  return [maxConf];
 }
 
 // Mock inference — realistic-looking predictions based on image brightness/colour
