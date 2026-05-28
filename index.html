@@ -581,16 +581,7 @@ document.getElementById('pin-count').textContent = `${pinCount} sites flagged`;
 
 // CLASS DEFINITIONS — matches Anagh model output order exactly
 const CLASSES = [
-  { name: "Turbid / Contaminated Water", severity: "high",   color: "#ef4444" },
-  { name: "Clear Water Source",          severity: "low",    color: "#22c55e" },
-  { name: "Open Defecation Zone",        severity: "high",   color: "#ef4444" },
-  { name: "Waste Dump / Latrine Breach", severity: "high",   color: "#ef4444" },
-  { name: "Drainage Blockage",           severity: "medium", color: "#f59e0b" },
-  { name: "Healthy Vegetation / Safe",   severity: "low",    color: "#22c55e" },
-  { name: "Clean",                       severity: "low",    color: "#22c55e" },
-  { name: "Turbid / Contaminated",       severity: "high",   color: "#ef4444" },
-  { name: "Health Contamination Hazard", severity: "high",   color: "#ef4444" },
-  { name: "Waste Sanitation Hazard",     severity: "high",   color: "#ef4444" },
+  { name: "Marine Litter Detected",  severity: "high",  color: "#ef4444" },
 ];
 
 let ortSession = null;
@@ -659,17 +650,16 @@ function mockInference(imageElement) {
       for (let i = 0; i < d.length; i+=4) { r+=d[i]; g+=d[i+1]; b+=d[i+2]; }
       r/=(d.length/4); g/=(d.length/4); b/=(d.length/4);
 
-      // Heuristic: 10 classes
-      // turbid, clear, OD, waste, drainage, healthy, clean, turbid2, hazard, sanitation
+      // Single class: marine_litter confidence score
       let scores;
-      if (b > r && b > g) {
-        scores = [0.48, 0.10, 0.03, 0.04, 0.08, 0.05, 0.07, 0.09, 0.03, 0.03]; // turbid water
+      if (r > g && r > b) {
+        scores = [0.80]; // warm/brown tones → likely litter
       } else if (g > r && g > b) {
-        scores = [0.04, 0.10, 0.04, 0.03, 0.05, 0.40, 0.20, 0.04, 0.05, 0.05]; // healthy/clean
-      } else if (r > g && r > b) {
-        scores = [0.05, 0.04, 0.18, 0.25, 0.08, 0.04, 0.05, 0.08, 0.12, 0.11]; // waste/OD
+        scores = [0.15]; // green tones → likely clean
+      } else if (b > r && b > g) {
+        scores = [0.20]; // blue tones → likely clean water
       } else {
-        scores = [0.08, 0.07, 0.08, 0.08, 0.28, 0.08, 0.09, 0.08, 0.08, 0.10]; // drainage
+        scores = [0.55]; // neutral
       }
 
       // Add small noise
@@ -720,7 +710,7 @@ function handleFile(file) {
       const img = document.getElementById('preview-img');
       img.src = ev.target.result;
       document.getElementById('preview-wrap').style.display = 'block';
-      document.getElementById('img-name').textContent = file.name + ' (512×512 ✓)';
+      document.getElementById('img-name').textContent = file.name;
       document.getElementById('analyse-btn').style.display = 'block';
       document.getElementById('result-card').style.display = 'none';
     };
@@ -751,17 +741,24 @@ async function runInference() {
     probs = await mockInference(img);
   }
 
-  // Find top class
-  const topIdx = probs.indexOf(Math.max(...probs));
-  const topClass = CLASSES[topIdx];
-  lastResult = { label: topClass.name, severity: topClass.severity, probs };
+  // Find top class — if confidence below 0.5, show clean
+  const topProb = Math.max(...probs);
+  const topIdx = probs.indexOf(topProb);
+  let label, severity;
+  if (ortSession && topProb < 0.5) {
+    label = "Clean — No Litter Detected";
+    severity = "low";
+  } else {
+    label = CLASSES[topIdx] ? CLASSES[topIdx].name : "Clean — No Litter Detected";
+    severity = CLASSES[topIdx] ? CLASSES[topIdx].severity : "low";
+  }
+  lastResult = { label, severity, probs };
 
-  // Render result
-  document.getElementById('result-label').textContent = topClass.name;
+  document.getElementById('result-label').textContent = lastResult.label;
 
   const badge = document.getElementById('severity-badge');
-  badge.textContent = topClass.severity;
-  badge.className = 'severity-badge badge-' + topClass.severity;
+  badge.textContent = lastResult.severity;
+  badge.className = 'severity-badge badge-' + lastResult.severity;
 
   // Confidence bars
   const barsEl = document.getElementById('conf-bars');
@@ -885,6 +882,11 @@ function downloadResult() {
 }
 
 loadModel();
+
+// Expose functions to global scope for onclick attributes
+window.runInference = runInference;
+window.addPin = addPin;
+window.downloadResult = downloadResult;
 
 }); // end window.addEventListener load
 </script>
