@@ -449,7 +449,7 @@
         <span class="drop-icon">📡</span>
         <div id="drop-msg">
           <div class="drop-title">Drop aerial image here</div>
-          <div class="drop-sub">640 × 640 px only — JPG, PNG, WebP</div>
+          <div class="drop-sub">JPG, PNG, WebP — any size</div>
         </div>
         <input type="file" id="file-input" accept="image/*"/>
       </div>
@@ -705,7 +705,7 @@ function showError(msg) {
     dz.style.borderColor = '';
     dz.style.background = '';
     document.getElementById('drop-msg').innerHTML =
-      '<div class="drop-title">Drop aerial image here</div><div class="drop-sub">640 × 640 px only — JPG, PNG, WebP</div>';
+      '<div class="drop-title">Drop aerial image here</div><div class="drop-sub">JPG, PNG, WebP — any size</div>';
   }, 3000);
 }
 
@@ -716,10 +716,6 @@ function handleFile(file) {
     // Check dimensions before accepting
     const testImg = new Image();
     testImg.onload = function() {
-      if (testImg.width !== 640 || testImg.height !== 640) {
-        showError('Image must be exactly 640 × 640 px. Yours is ' + testImg.width + ' × ' + testImg.height);
-        return;
-      }
       const img = document.getElementById('preview-img');
       img.src = ev.target.result;
       document.getElementById('preview-wrap').style.display = 'block';
