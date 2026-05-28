@@ -383,6 +383,24 @@
     </div>
 
     <div id="map"></div>
+
+    <div style="padding:20px;border-top:1px solid var(--border);background:#111618;overflow:auto;">
+      <div class="panel-label" style="margin-bottom:12px">Model detection output</div>
+
+      <div id="detection-output" style="display:none;">
+        <img
+          id="detection-img"
+          src=""
+          alt="Detection Output"
+          style="width:100%;border-radius:12px;border:1px solid var(--border);display:block;"
+        />
+
+        <div
+          id="detection-info"
+          style="margin-top:12px;font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;"
+        ></div>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -545,8 +563,37 @@ async function runInference() {
     };
 
     if (result.image) {
-      document.getElementById('preview-img').src =
-        'data:image/jpeg;base64,' + result.image;
+      const imgSrc = 'data:image/jpeg;base64,' + result.image;
+
+      document.getElementById('preview-img').src = imgSrc;
+
+      document.getElementById('detection-img').src = imgSrc;
+
+      document.getElementById('detection-output').style.display = 'block';
+
+      let detectionHtml = '';
+
+      if (result.detections && result.detections.length > 0) {
+
+        result.detections.forEach((det, index) => {
+          detectionHtml += `
+            <div style="padding:10px;border:1px solid #1e2729;border-radius:10px;margin-bottom:10px;background:#0a0e0f;">
+              <div style="color:#ef4444;font-weight:700;">marine_litter_${index + 1}</div>
+              <div>Confidence: ${(det.confidence * 100).toFixed(1)}%</div>
+            </div>
+          `;
+        });
+
+      } else {
+
+        detectionHtml = `
+          <div style="padding:10px;border:1px solid #1e2729;border-radius:10px;background:#0a0e0f;color:#22c55e;">
+            No marine litter detected.
+          </div>
+        `;
+      }
+
+      document.getElementById('detection-info').innerHTML = detectionHtml;
     };
 
     document.getElementById('result-label').textContent = label;
