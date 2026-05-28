@@ -481,6 +481,7 @@
           <input class="loc-input" id="lng-input" placeholder="Longitude" value="36.8172" type="number" step="0.0001"/>
         </div>
         <button id="pin-btn" onclick="addPin()">📍 Drop pin on map</button>
+        <button id="download-btn" onclick="downloadResult()" style="width:100%;margin-top:8px;padding:14px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;">⬇ Download Result</button>
       </div>
     </div>
 
@@ -828,6 +829,61 @@ function addPin() {
 // ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// DOWNLOAD RESULT
+// ─────────────────────────────────────────────
+function downloadResult() {
+  if (!lastResult) return;
+
+  const img = document.getElementById('preview-img');
+  const canvas = document.createElement('canvas');
+  canvas.width = 640;
+  canvas.height = 740; // extra space for label bar at bottom
+  const ctx = canvas.getContext('2d');
+
+  // Draw the image
+  ctx.drawImage(img, 0, 0, 640, 640);
+
+  // Bottom bar background
+  const severityBg = { low: '#22c55e', medium: '#f59e0b', high: '#ef4444' };
+  const col = severityBg[lastResult.severity] || '#00d4aa';
+  ctx.fillStyle = '#111618';
+  ctx.fillRect(0, 640, 640, 100);
+
+  // Coloured accent strip
+  ctx.fillStyle = col;
+  ctx.fillRect(0, 640, 6, 100);
+
+  // Label text
+  ctx.fillStyle = '#e8eef0';
+  ctx.font = 'bold 22px sans-serif';
+  ctx.fillText(lastResult.label, 20, 672);
+
+  // Confidence
+  const conf = Math.round(Math.max(...lastResult.probs) * 100);
+  ctx.fillStyle = '#5a6e72';
+  ctx.font = '14px monospace';
+  ctx.fillText('Confidence: ' + conf + '%', 20, 698);
+
+  // Severity badge
+  ctx.fillStyle = col;
+  ctx.font = 'bold 12px monospace';
+  ctx.fillText(lastResult.severity.toUpperCase(), 20, 724);
+
+  // Timestamp
+  const ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
+  ctx.fillStyle = '#5a6e72';
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText('WASH UAV Inspector — ' + ts, 630, 724);
+
+  // Download
+  const a = document.createElement('a');
+  a.download = 'wash_result_' + lastResult.label.replace(/\s+/g, '_') + '_' + conf + 'pct.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
 loadModel();
 
 }); // end window.addEventListener load
